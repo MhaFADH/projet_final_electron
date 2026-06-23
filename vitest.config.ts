@@ -16,6 +16,7 @@ export default defineConfig({
   plugins: [sqlRaw()],
   test: {
     environment: 'node',
+    pool: 'threads',
     include: ['src/**/*.test.ts'],
   },
 });
