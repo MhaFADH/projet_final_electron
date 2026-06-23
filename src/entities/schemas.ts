@@ -10,3 +10,10 @@ export const newProductSchema = z.object({
 });
 
 export const productUpdateSchema = newProductSchema.partial();
+
+export const cartItemSchema = z.object({
+  productId: z.number().int().positive(),
+  quantity: z.number().int().positive(),
+});
+
+export const cartSchema = z.array(cartItemSchema).min(1);

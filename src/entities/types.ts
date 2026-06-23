@@ -29,3 +29,31 @@ export interface ProductLookup {
   brand: string | null;
   category: string | null;
 }
+
+export interface Sale {
+  id: number;
+  createdAt: string;
+  totalCents: number;
+}
+
+export interface SaleItem {
+  id: number;
+  saleId: number;
+  productId: number;
+  nameSnapshot: string;
+  unitPriceCents: number;
+  quantity: number;
+  lineTotalCents: number;
+}
+
+export interface SaleWithItems extends Sale {
+  items: SaleItem[];
+}
+
+export interface CartItem {
+  productId: number;
+  quantity: number;
+}
+
+export type SaleRow = Omit<Sale, 'id'>;
+export type SaleItemRow = Omit<SaleItem, 'id'>;

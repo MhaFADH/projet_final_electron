@@ -60,3 +60,11 @@ describe('productRepository', () => {
     expect(repo.search('zzz')).toEqual([]);
   });
 });
+
+describe('productRepository.decrementStock', () => {
+  it('reduces stock by the given quantity', () => {
+    const id = repo.insert(row({ stock: 10 }));
+    repo.decrementStock(id, 3);
+    expect(repo.findById(id)?.stock).toBe(7);
+  });
+});

@@ -44,7 +44,14 @@ export const createProductRepository = (db: Database.Database) => {
       .all(like, like) as Product[];
   };
 
-  return { insert, findById, findAll, update, deleteById, search };
+  const decrementStock = (id: number, quantity: number): void => {
+    db.prepare('UPDATE products SET stock = stock - ? WHERE id = ?').run(
+      quantity,
+      id,
+    );
+  };
+
+  return { insert, findById, findAll, update, deleteById, search, decrementStock };
 };
 
 export type ProductRepository = ReturnType<typeof createProductRepository>;
