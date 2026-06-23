@@ -4,6 +4,7 @@ import { createDatabase } from './services/database';
 import { createProductRepository } from './repositories/productRepository';
 import { createProductService } from './services/productService';
 import { registerHandlers } from './ipc/registerHandlers';
+import { createOpenFoodFacts } from './integrations/openFoodFacts';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -30,6 +31,7 @@ app.on('ready', () => {
   const db = createDatabase(path.join(app.getPath('userData'), 'caisse.db'));
   registerHandlers(ipcMain, {
     products: createProductService(createProductRepository(db)),
+    off: createOpenFoodFacts(),
   });
   createWindow();
 });

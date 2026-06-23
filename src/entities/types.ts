@@ -22,3 +22,10 @@ export interface NewProduct {
 export type ProductUpdate = Partial<NewProduct>;
 
 export type ProductRow = Omit<Product, 'id'>;
+
+export interface ProductLookup {
+  barcode: string;
+  name: string | null;
+  brand: string | null;
+  category: string | null;
+}

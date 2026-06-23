@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { createDatabase } from '../services/database';
 import { createProductRepository } from '../repositories/productRepository';
 import { createProductService } from '../services/productService';
+import { createOpenFoodFacts } from '../integrations/openFoodFacts';
 import { registerHandlers } from './registerHandlers';
 
 type Handler = (event: unknown, args: unknown[]) => unknown;
@@ -24,7 +25,12 @@ beforeEach(() => {
   const products = createProductService(
     createProductRepository(createDatabase()),
   );
-  registerHandlers(ipc, { products });
+  const off = createOpenFoodFacts(
+    (() => {
+      throw new Error('no network in tests');
+    }) as unknown as typeof fetch,
+  );
+  registerHandlers(ipc, { products, off });
 });
 
 describe('registerHandlers', () => {

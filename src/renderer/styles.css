@@ -13,3 +13,5 @@ body {
 .add-form input { padding: 0.4rem; }
 .product-list { width: 100%; border-collapse: collapse; }
 .product-list th, .product-list td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #ddd; }
+.barcode-row { display: flex; gap: 0.5rem; }
+.lookup-message { color: #b45309; margin: 0; }
