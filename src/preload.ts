@@ -24,6 +24,8 @@ const api: Api = {
   },
   sales: {
     create: (cart) => invoke(saleChannels.create, [cart]),
+    history: (day) => invoke(saleChannels.history, [day]),
+    receipt: (id) => invoke(saleChannels.receipt, [id]),
   },
 };
 

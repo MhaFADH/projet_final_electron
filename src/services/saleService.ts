@@ -1,4 +1,4 @@
-import type { CartItem, SaleWithItems, SaleItemRow } from '../entities/types';
+import type { CartItem, Sale, SaleWithItems, SaleItemRow } from '../entities/types';
 import { cartSchema } from '../entities/schemas';
 import type { ProductRepository } from '../repositories/productRepository';
 import type { SaleRepository } from '../repositories/saleRepository';
@@ -55,7 +55,12 @@ export const createSaleService = ({
     });
   };
 
-  return { createSale };
+  const history = (day: string): Sale[] =>
+    day ? sales.listByDate(day) : sales.list();
+
+  const getReceipt = (id: number): SaleWithItems | null => sales.findById(id);
+
+  return { createSale, history, getReceipt };
 };
 
 export type SaleService = ReturnType<typeof createSaleService>;

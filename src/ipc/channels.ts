@@ -1,4 +1,4 @@
-import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, SaleWithItems } from '../entities/types';
+import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, Sale, SaleWithItems } from '../entities/types';
 
 export const productChannels = {
   list: 'products:list',
@@ -28,10 +28,14 @@ export interface OffApi {
 
 export const saleChannels = {
   create: 'sales:create',
+  history: 'sales:history',
+  receipt: 'sales:receipt',
 } as const;
 
 export interface SaleApi {
   create(cart: CartItem[]): Promise<SaleWithItems>;
+  history(day: string): Promise<Sale[]>;
+  receipt(id: number): Promise<SaleWithItems | null>;
 }
 
 export interface Api {

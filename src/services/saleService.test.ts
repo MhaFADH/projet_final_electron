@@ -62,3 +62,29 @@ describe('saleService.createSale', () => {
     expect(() => service.createSale([])).toThrow();
   });
 });
+
+describe('saleService history/getReceipt', () => {
+  it('history with empty day returns all sales', () => {
+    service.createSale([{ productId: laitId, quantity: 1 }]);
+    service.createSale([{ productId: painId, quantity: 1 }]);
+    expect(service.history('')).toHaveLength(2);
+  });
+
+  it('history filters by day', () => {
+    service.createSale([{ productId: laitId, quantity: 1 }]);
+    const today = new Date().toISOString().slice(0, 10);
+    expect(service.history(today)).toHaveLength(1);
+    expect(service.history('2099-01-01')).toHaveLength(0);
+  });
+
+  it('getReceipt returns the sale with its items', () => {
+    const created = service.createSale([{ productId: laitId, quantity: 2 }]);
+    const receipt = service.getReceipt(created.id);
+    expect(receipt?.items).toHaveLength(1);
+    expect(receipt?.items[0]?.quantity).toBe(2);
+  });
+
+  it('getReceipt returns null for a missing id', () => {
+    expect(service.getReceipt(999)).toBeNull();
+  });
+});

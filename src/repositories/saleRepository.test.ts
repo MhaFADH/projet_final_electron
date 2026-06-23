@@ -56,3 +56,22 @@ describe('saleRepository', () => {
     expect(repo.findById(saleId)?.items).toEqual([]);
   });
 });
+
+describe('saleRepository list/listByDate', () => {
+  it('list returns sales newest first', () => {
+    repo.insertSale({ createdAt: '2026-06-20T09:00:00.000Z', totalCents: 100 });
+    repo.insertSale({ createdAt: '2026-06-22T09:00:00.000Z', totalCents: 200 });
+    expect(repo.list().map((s) => s.totalCents)).toEqual([200, 100]);
+  });
+
+  it('listByDate returns only that day, newest first', () => {
+    repo.insertSale({ createdAt: '2026-06-20T09:00:00.000Z', totalCents: 100 });
+    repo.insertSale({ createdAt: '2026-06-22T08:00:00.000Z', totalCents: 200 });
+    repo.insertSale({ createdAt: '2026-06-22T18:00:00.000Z', totalCents: 300 });
+    expect(repo.listByDate('2026-06-22').map((s) => s.totalCents)).toEqual([300, 200]);
+  });
+
+  it('listByDate returns empty for a day with no sales', () => {
+    expect(repo.listByDate('2099-01-01')).toEqual([]);
+  });
+});

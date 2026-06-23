@@ -93,4 +93,26 @@ describe('sales channel', () => {
     const error = await err(ipc.invoke('sales:create', [[{ productId: product.id, quantity: 5 }]]));
     expect(error.code).toBe('INSUFFICIENT_STOCK');
   });
+
+  it('returns sale history through the channel', async () => {
+    const product = await ok<{ id: number }>(
+      ipc.invoke('products:create', [{ name: 'Lait', priceCents: 99, stock: 10 }]),
+    );
+    await ok(ipc.invoke('sales:create', [[{ productId: product.id, quantity: 1 }]]));
+    const history = await ok<unknown[]>(ipc.invoke('sales:history', ['']));
+    expect(history).toHaveLength(1);
+  });
+
+  it('returns a receipt through the channel', async () => {
+    const product = await ok<{ id: number }>(
+      ipc.invoke('products:create', [{ name: 'Lait', priceCents: 99, stock: 10 }]),
+    );
+    const sale = await ok<{ id: number }>(
+      ipc.invoke('sales:create', [[{ productId: product.id, quantity: 2 }]]),
+    );
+    const receipt = await ok<{ items: unknown[] }>(
+      ipc.invoke('sales:receipt', [sale.id]),
+    );
+    expect(receipt.items).toHaveLength(1);
+  });
 });

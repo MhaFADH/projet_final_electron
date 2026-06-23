@@ -11,4 +11,14 @@ export const saleHandlers = (sales: SaleService): Command[] => [
     schema: z.tuple([cartSchema]),
     handle: (cart: CartItem[]) => sales.createSale(cart),
   },
+  {
+    channel: saleChannels.history,
+    schema: z.tuple([z.string()]),
+    handle: (day: string) => sales.history(day),
+  },
+  {
+    channel: saleChannels.receipt,
+    schema: z.tuple([z.number().int()]),
+    handle: (id: number) => sales.getReceipt(id),
+  },
 ];

@@ -37,7 +37,19 @@ export const createSaleRepository = (db: Database.Database) => {
     return { ...sale, items };
   };
 
-  return { insertSale, insertItem, findById };
+  const list = (): Sale[] =>
+    db
+      .prepare('SELECT * FROM sales ORDER BY createdAt DESC, id DESC')
+      .all() as Sale[];
+
+  const listByDate = (day: string): Sale[] =>
+    db
+      .prepare(
+        'SELECT * FROM sales WHERE createdAt LIKE ? ORDER BY createdAt DESC, id DESC',
+      )
+      .all(`${day}%`) as Sale[];
+
+  return { insertSale, insertItem, findById, list, listByDate };
 };
 
 export type SaleRepository = ReturnType<typeof createSaleRepository>;
