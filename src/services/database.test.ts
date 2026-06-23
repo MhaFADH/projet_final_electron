@@ -8,9 +8,9 @@ describe('createDatabase', () => {
       .prepare(
         "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name",
       )
-      .all()
-      .map((r: { name: string }) => r.name);
-    expect(tables).toEqual(
+      .all() as { name: string }[];
+    const names = tables.map((r) => r.name);
+    expect(names).toEqual(
       expect.arrayContaining(['products', 'sale_items', 'sales']),
     );
   });

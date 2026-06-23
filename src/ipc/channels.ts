@@ -1,4 +1,4 @@
-import type { Product, NewProduct, ProductUpdate, ProductLookup } from '../entities/types';
+import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, SaleWithItems } from '../entities/types';
 
 export const productChannels = {
   list: 'products:list',
@@ -26,7 +26,16 @@ export interface OffApi {
   lookup(barcode: string): Promise<ProductLookup | null>;
 }
 
+export const saleChannels = {
+  create: 'sales:create',
+} as const;
+
+export interface SaleApi {
+  create(cart: CartItem[]): Promise<SaleWithItems>;
+}
+
 export interface Api {
   products: ProductApi;
   off: OffApi;
+  sales: SaleApi;
 }

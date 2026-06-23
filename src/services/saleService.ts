@@ -2,8 +2,7 @@ import type { CartItem, SaleWithItems, SaleItemRow } from '../entities/types';
 import { cartSchema } from '../entities/schemas';
 import type { ProductRepository } from '../repositories/productRepository';
 import type { SaleRepository } from '../repositories/saleRepository';
-
-export class InsufficientStockError extends Error {}
+import { InsufficientStockError, ProductNotFoundError } from '../entities/errors';
 
 export type Transaction = <T>(fn: () => T) => T;
 
@@ -24,7 +23,7 @@ export const createSaleService = ({
     const lines = items.map((item) => {
       const product = products.findById(item.productId);
       if (!product) {
-        throw new Error(`Produit introuvable (id ${item.productId})`);
+        throw new ProductNotFoundError(`Produit introuvable (id ${item.productId})`);
       }
       if (item.quantity > product.stock) {
         throw new InsufficientStockError(

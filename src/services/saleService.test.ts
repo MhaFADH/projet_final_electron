@@ -2,11 +2,8 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { createDatabase } from './database';
 import { createProductRepository } from '../repositories/productRepository';
 import { createSaleRepository } from '../repositories/saleRepository';
-import {
-  createSaleService,
-  InsufficientStockError,
-  type SaleService,
-} from './saleService';
+import { createSaleService, type SaleService } from './saleService';
+import { InsufficientStockError } from '../entities/errors';
 
 let service: SaleService;
 let products: ReturnType<typeof createProductRepository>;

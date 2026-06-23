@@ -3,6 +3,8 @@ import path from 'node:path';
 import { createDatabase } from './services/database';
 import { createProductRepository } from './repositories/productRepository';
 import { createProductService } from './services/productService';
+import { createSaleRepository } from './repositories/saleRepository';
+import { createSaleService } from './services/saleService';
 import { registerHandlers } from './ipc/registerHandlers';
 import { createOpenFoodFacts } from './integrations/openFoodFacts';
 
@@ -29,8 +31,15 @@ const createWindow = (): void => {
 
 app.on('ready', () => {
   const db = createDatabase(path.join(app.getPath('userData'), 'caisse.db'));
+  const productRepo = createProductRepository(db);
+  const saleRepo = createSaleRepository(db);
   registerHandlers(ipcMain, {
-    products: createProductService(createProductRepository(db)),
+    products: createProductService(productRepo),
+    sales: createSaleService({
+      products: productRepo,
+      sales: saleRepo,
+      transaction: (fn) => db.transaction(fn)(),
+    }),
     off: createOpenFoodFacts(),
   });
   createWindow();
