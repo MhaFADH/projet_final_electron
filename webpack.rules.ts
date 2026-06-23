@@ -28,4 +28,8 @@ export const rules: Required<ModuleOptions>['rules'] = [
       },
     },
   },
+  {
+    test: /\.sql$/,
+    type: 'asset/source',
+  },
 ];
