@@ -1,92 +1,85 @@
 import { useState } from 'react';
+import { Table, Button, Input, Modal, Tag, Space, Popconfirm, Typography } from 'antd';
+import type { TableProps } from 'antd';
+import type { NewProduct, Product } from '../../entities/types';
 import { useProducts } from '../hooks/useProducts';
+import { ProductForm } from '../components/ProductForm';
 
 const euros = (cents: number) => (cents / 100).toFixed(2) + ' €';
 
 export const ProductsPage = () => {
-  const { products, query, setQuery, add, remove } = useProducts();
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [stock, setStock] = useState('');
-  const [barcode, setBarcode] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
-  const [message, setMessage] = useState('');
+  const { products, query, setQuery, add, update, remove } = useProducts();
+  const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<Product | null>(null);
 
-  const lookup = async () => {
-    const code = barcode.trim();
-    if (!code) return;
-    const found = await window.api.off.lookup(code);
-    if (!found) {
-      setMessage('Produit introuvable — saisie manuelle');
-      return;
+  const onAdd = async (values: NewProduct) => {
+    await add(values);
+    setAdding(false);
+  };
+  const onEdit = async (values: NewProduct) => {
+    if (editing) {
+      await update(editing.id, values);
+      setEditing(null);
     }
-    if (found.name) setName(found.name);
-    if (found.brand) setBrand(found.brand);
-    if (found.category) setCategory(found.category);
-    setMessage('');
   };
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await add({
-      name: name.trim(),
-      priceCents: Math.round(parseFloat(price) * 100),
-      stock: parseInt(stock, 10),
-      barcode: barcode.trim() || null,
-      brand: brand.trim() || null,
-      category: category.trim() || null,
-    });
-    setName('');
-    setPrice('');
-    setStock('');
-    setBarcode('');
-    setBrand('');
-    setCategory('');
-    setMessage('');
-  };
+  const columns: TableProps<Product>['columns'] = [
+    {
+      title: 'Nom',
+      dataIndex: 'name',
+      render: (name: string, p) => (
+        <Space direction="vertical" size={0}>
+          <Typography.Text strong>{name}</Typography.Text>
+          {p.brand && <Typography.Text type="secondary">{p.brand}</Typography.Text>}
+        </Space>
+      ),
+    },
+    { title: 'Catégorie', dataIndex: 'category', render: (c?: string) => c || '—' },
+    { title: 'Prix', dataIndex: 'priceCents', align: 'right', render: euros },
+    {
+      title: 'Stock',
+      dataIndex: 'stock',
+      align: 'right',
+      render: (s: number) => <Tag color={s > 0 ? 'green' : 'red'}>{s}</Tag>,
+    },
+    {
+      title: '',
+      key: 'actions',
+      align: 'right',
+      render: (_, p) => (
+        <Space>
+          <Button size="small" onClick={() => setEditing(p)}>Modifier</Button>
+          <Popconfirm title="Supprimer ce produit ?" onConfirm={() => remove(p.id)} okText="Oui" cancelText="Non">
+            <Button size="small" danger>Supprimer</Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <section className="products">
-      <h2>Produits</h2>
+    <>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+        <Typography.Title level={3} style={{ margin: 0 }}>Produits</Typography.Title>
+        <Button type="primary" onClick={() => setAdding(true)}>+ Ajouter un produit</Button>
+      </div>
 
-      <input
-        className="search"
+      <Input.Search
         placeholder="Rechercher (nom ou code-barres)"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        style={{ maxWidth: 360, marginBottom: 16 }}
+        allowClear
       />
 
-      <form className="add-form" onSubmit={submit}>
-        <input placeholder="Nom" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input placeholder="Prix (€)" type="number" step="0.01" min="0" value={price} onChange={(e) => setPrice(e.target.value)} required />
-        <input placeholder="Stock" type="number" min="0" value={stock} onChange={(e) => setStock(e.target.value)} required />
-        <div className="barcode-row">
-          <input placeholder="Code-barres" value={barcode} onChange={(e) => setBarcode(e.target.value)} />
-          <button type="button" onClick={lookup}>Chercher</button>
-        </div>
-        <input placeholder="Marque" value={brand} onChange={(e) => setBrand(e.target.value)} />
-        <input placeholder="Catégorie" value={category} onChange={(e) => setCategory(e.target.value)} />
-        {message && <p className="lookup-message">{message}</p>}
-        <button type="submit">Ajouter</button>
-      </form>
+      <Table rowKey="id" columns={columns} dataSource={products} pagination={{ pageSize: 10, hideOnSinglePage: true }} />
 
-      <table className="product-list">
-        <thead>
-          <tr><th>Nom</th><th>Prix</th><th>Stock</th><th>Code-barres</th><th></th></tr>
-        </thead>
-        <tbody>
-          {products.map((p) => (
-            <tr key={p.id}>
-              <td>{p.name}</td>
-              <td>{euros(p.priceCents)}</td>
-              <td>{p.stock}</td>
-              <td>{p.barcode ?? '—'}</td>
-              <td><button onClick={() => remove(p.id)}>Supprimer</button></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+      <Modal title="Ajouter un produit" open={adding} onCancel={() => setAdding(false)} footer={null} destroyOnHidden>
+        <ProductForm submitLabel="Ajouter" onSubmit={onAdd} />
+      </Modal>
+      <Modal title="Modifier le produit" open={editing !== null} onCancel={() => setEditing(null)} footer={null} destroyOnHidden>
+        {editing && <ProductForm initial={editing} submitLabel="Enregistrer" onSubmit={onEdit} />}
+      </Modal>
+    </>
   );
 };

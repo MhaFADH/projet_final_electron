@@ -24,6 +24,14 @@ export const useProducts = () => {
     [refresh],
   );
 
+  const update = useCallback(
+    async (id: number, input: NewProduct) => {
+      await window.api.products.update(id, input);
+      await refresh();
+    },
+    [refresh],
+  );
+
   const remove = useCallback(
     async (id: number) => {
       await window.api.products.remove(id);
@@ -32,5 +40,5 @@ export const useProducts = () => {
     [refresh],
   );
 
-  return { products, query, setQuery, add, remove };
+  return { products, query, setQuery, add, update, remove };
 };

@@ -47,11 +47,11 @@
     "vitest": "^4.1.9"
   },
   "dependencies": {
+    "antd": "^6.4.5",
     "better-sqlite3": "^12.11.1",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sonner": "^2.0.7",
     "zod": "^4.4.3"
   }
 }
