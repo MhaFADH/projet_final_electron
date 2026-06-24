@@ -32,3 +32,4 @@ body {
 .receipt { border: 1px solid #ddd; padding: 1rem; }
 .receipt table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
 .receipt th, .receipt td { text-align: left; padding: 0.3rem; border-bottom: 1px solid #eee; }
+.history-actions { display: flex; gap: 0.5rem; }

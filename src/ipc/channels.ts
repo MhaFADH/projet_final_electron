@@ -1,4 +1,5 @@
 import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, Sale, SaleWithItems } from '../entities/types';
+import type { ExportFormat, ExportResult } from '../export/exporter';
 
 export const productChannels = {
   list: 'products:list',
@@ -38,8 +39,17 @@ export interface SaleApi {
   receipt(id: number): Promise<SaleWithItems | null>;
 }
 
+export const exportChannels = {
+  run: 'export:run',
+} as const;
+
+export interface ExportApi {
+  run(format: ExportFormat, day: string): Promise<ExportResult>;
+}
+
 export interface Api {
   products: ProductApi;
-  off: OffApi;
   sales: SaleApi;
+  off: OffApi;
+  export: ExportApi;
 }

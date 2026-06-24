@@ -38,7 +38,7 @@ beforeEach(() => {
       throw new Error('no network in tests');
     }) as unknown as typeof fetch,
   );
-  registerHandlers(ipc, { products, off, sales });
+  registerHandlers(ipc, { products, off, sales, export: () => Promise.resolve({ saved: false }) });
 });
 
 const ok = async <T>(p: unknown): Promise<T> => {

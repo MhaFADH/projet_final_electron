@@ -7,6 +7,9 @@ import { createSaleRepository } from './repositories/saleRepository';
 import { createSaleService } from './services/saleService';
 import { registerHandlers } from './ipc/registerHandlers';
 import { createOpenFoodFacts } from './integrations/openFoodFacts';
+import { exporters } from './export';
+import { exportToFile } from './export/exportToFile';
+import type { ExportRunner } from './export/exporter';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -33,14 +36,24 @@ app.on('ready', () => {
   const db = createDatabase(path.join(app.getPath('userData'), 'caisse.db'));
   const productRepo = createProductRepository(db);
   const saleRepo = createSaleRepository(db);
+  const transaction = <T>(fn: () => T): T => db.transaction(fn)();
+  const saleService = createSaleService({
+    products: productRepo,
+    sales: saleRepo,
+    transaction,
+  });
+  const productService = createProductService(productRepo);
+  const runExport: ExportRunner = (format, day) =>
+    exportToFile(exporters[format], {
+      title: `caisse-${day || 'complet'}`,
+      products: productService.list(),
+      sales: saleService.history(day),
+    });
   registerHandlers(ipcMain, {
-    products: createProductService(productRepo),
-    sales: createSaleService({
-      products: productRepo,
-      sales: saleRepo,
-      transaction: (fn) => db.transaction(fn)(),
-    }),
+    products: productService,
+    sales: saleService,
     off: createOpenFoodFacts(),
+    export: runExport,
   });
   createWindow();
 });

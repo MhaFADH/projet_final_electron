@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { productChannels, offChannels, saleChannels, type Api } from './ipc/channels';
+import { productChannels, offChannels, saleChannels, exportChannels, type Api } from './ipc/channels';
 import { ClientError, type IpcResult } from './ipc/errors';
 
 const invoke = async <T>(channel: string, args: unknown[]): Promise<T> => {
@@ -26,6 +26,9 @@ const api: Api = {
     create: (cart) => invoke(saleChannels.create, [cart]),
     history: (day) => invoke(saleChannels.history, [day]),
     receipt: (id) => invoke(saleChannels.receipt, [id]),
+  },
+  export: {
+    run: (format, day) => invoke(exportChannels.run, [format, day]),
   },
 };
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Sale, SaleWithItems } from '../../entities/types';
+import { notifySuccess } from '../notify';
 
 const euros = (cents: number) => (cents / 100).toFixed(2) + ' €';
 const formatDate = (iso: string) => new Date(iso).toLocaleString('fr-FR');
@@ -17,6 +18,13 @@ export const HistoryPage = () => {
   const openReceipt = async (id: number) =>
     setReceipt(await window.api.sales.receipt(id));
 
+  const exportAs = async (format: 'csv' | 'pdf') => {
+    const result = await window.api.export.run(format, day);
+    if (result.saved) {
+      notifySuccess('Export terminé', result.path ?? '');
+    }
+  };
+
   return (
     <section className="history">
       <h2>Historique des ventes</h2>
@@ -24,6 +32,11 @@ export const HistoryPage = () => {
       <div className="history-filter">
         <input type="date" value={day} onChange={(e) => setDay(e.target.value)} />
         <button type="button" onClick={() => setDay('')}>Tout</button>
+      </div>
+
+      <div className="history-actions">
+        <button type="button" onClick={() => exportAs('csv')}>Exporter CSV</button>
+        <button type="button" onClick={() => exportAs('pdf')}>Exporter PDF</button>
       </div>
 
       <table className="sales-list">
