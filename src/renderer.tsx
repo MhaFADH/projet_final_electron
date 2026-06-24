@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import 'antd/dist/reset.css';
+import './renderer/i18n';
 import { App } from './renderer/App';
 import './renderer/styles.css';
 

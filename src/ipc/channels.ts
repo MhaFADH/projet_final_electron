@@ -1,4 +1,4 @@
-import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, Sale, SaleWithItems } from '../entities/types';
+import type { Product, NewProduct, ProductUpdate, ProductLookup, CartItem, Sale, SaleWithItems, Prefs } from '../entities/types';
 import type { ExportFormat, ExportResult } from '../export/exporter';
 
 export const productChannels = {
@@ -47,9 +47,20 @@ export interface ExportApi {
   run(format: ExportFormat, day: string): Promise<ExportResult>;
 }
 
+export const prefsChannels = {
+  get: 'prefs:get',
+  set: 'prefs:set',
+} as const;
+
+export interface PrefsApi {
+  get(): Promise<Prefs>;
+  set(patch: Partial<Prefs>): Promise<Prefs>;
+}
+
 export interface Api {
   products: ProductApi;
   sales: SaleApi;
   off: OffApi;
   export: ExportApi;
+  prefs: PrefsApi;
 }

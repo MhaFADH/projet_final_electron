@@ -1,5 +1,6 @@
 import { Form, Input, InputNumber, Button, Space } from 'antd';
 import type { NewProduct, Product } from '../../entities/types';
+import { useTranslation } from 'react-i18next';
 
 interface ProductFormProps {
   initial?: Product;
@@ -17,6 +18,7 @@ interface FormValues {
 }
 
 export const ProductForm = ({ initial, submitLabel, onSubmit }: ProductFormProps) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm<FormValues>();
 
   const lookup = async () => {
@@ -57,25 +59,25 @@ export const ProductForm = ({ initial, submitLabel, onSubmit }: ProductFormProps
 
   return (
     <Form form={form} layout="vertical" onFinish={onFinish} initialValues={initialValues}>
-      <Form.Item label="Code-barres" name="barcode">
+      <Form.Item label={t('form.barcode')} name="barcode">
         <Space.Compact style={{ width: '100%' }}>
-          <Input placeholder="Code-barres" />
-          <Button onClick={lookup}>Chercher</Button>
+          <Input placeholder={t('form.barcode')} />
+          <Button onClick={lookup}>{t('form.lookup')}</Button>
         </Space.Compact>
       </Form.Item>
-      <Form.Item label="Nom" name="name" rules={[{ required: true, message: 'Nom requis' }]}>
+      <Form.Item label={t('form.name')} name="name" rules={[{ required: true, message: t('form.nameRequired') }]}>
         <Input />
       </Form.Item>
       <Space size="large">
-        <Form.Item label="Prix (€)" name="price" rules={[{ required: true, message: 'Prix requis' }]}>
+        <Form.Item label={t('form.price')} name="price" rules={[{ required: true, message: t('form.priceRequired') }]}>
           <InputNumber min={0} step={0.01} style={{ width: 140 }} />
         </Form.Item>
-        <Form.Item label="Stock" name="stock" rules={[{ required: true, message: 'Stock requis' }]}>
+        <Form.Item label={t('form.stock')} name="stock" rules={[{ required: true, message: t('form.stockRequired') }]}>
           <InputNumber min={0} style={{ width: 140 }} />
         </Form.Item>
       </Space>
-      <Form.Item label="Marque" name="brand"><Input /></Form.Item>
-      <Form.Item label="Catégorie" name="category"><Input /></Form.Item>
+      <Form.Item label={t('form.brand')} name="brand"><Input /></Form.Item>
+      <Form.Item label={t('form.category')} name="category"><Input /></Form.Item>
       <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
         <Button type="primary" htmlType="submit">{submitLabel}</Button>
       </Form.Item>

@@ -50,8 +50,11 @@
     "antd": "^6.4.5",
     "better-sqlite3": "^12.11.1",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^8.2.0",
+    "i18next": "^26.3.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.8",
     "zod": "^4.4.3"
   }
 }

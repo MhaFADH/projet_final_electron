@@ -4,10 +4,12 @@ import type { TableProps } from 'antd';
 import type { NewProduct, Product } from '../../entities/types';
 import { useProducts } from '../hooks/useProducts';
 import { ProductForm } from '../components/ProductForm';
+import { useTranslation } from 'react-i18next';
 
 const euros = (cents: number) => (cents / 100).toFixed(2) + ' €';
 
 export const ProductsPage = () => {
+  const { t } = useTranslation();
   const { products, query, setQuery, add, update, remove } = useProducts();
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
@@ -25,7 +27,7 @@ export const ProductsPage = () => {
 
   const columns: TableProps<Product>['columns'] = [
     {
-      title: 'Nom',
+      title: t('products.name'),
       dataIndex: 'name',
       render: (name: string, p) => (
         <Space direction="vertical" size={0}>
@@ -34,10 +36,10 @@ export const ProductsPage = () => {
         </Space>
       ),
     },
-    { title: 'Catégorie', dataIndex: 'category', render: (c?: string) => c || '—' },
-    { title: 'Prix', dataIndex: 'priceCents', align: 'right', render: euros },
+    { title: t('products.category'), dataIndex: 'category', render: (c?: string) => c || t('products.none') },
+    { title: t('products.price'), dataIndex: 'priceCents', align: 'right', render: euros },
     {
-      title: 'Stock',
+      title: t('products.stock'),
       dataIndex: 'stock',
       align: 'right',
       render: (s: number) => <Tag color={s > 0 ? 'green' : 'red'}>{s}</Tag>,
@@ -48,9 +50,9 @@ export const ProductsPage = () => {
       align: 'right',
       render: (_, p) => (
         <Space>
-          <Button size="small" onClick={() => setEditing(p)}>Modifier</Button>
-          <Popconfirm title="Supprimer ce produit ?" onConfirm={() => remove(p.id)} okText="Oui" cancelText="Non">
-            <Button size="small" danger>Supprimer</Button>
+          <Button size="small" onClick={() => setEditing(p)}>{t('products.edit')}</Button>
+          <Popconfirm title={t('products.deleteConfirm')} onConfirm={() => remove(p.id)} okText={t('common.yes')} cancelText={t('common.no')}>
+            <Button size="small" danger>{t('products.delete')}</Button>
           </Popconfirm>
         </Space>
       ),
@@ -60,12 +62,12 @@ export const ProductsPage = () => {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-        <Typography.Title level={3} style={{ margin: 0 }}>Produits</Typography.Title>
-        <Button type="primary" onClick={() => setAdding(true)}>+ Ajouter un produit</Button>
+        <Typography.Title level={3} style={{ margin: 0 }}>{t('products.title')}</Typography.Title>
+        <Button type="primary" onClick={() => setAdding(true)}>{t('products.add')}</Button>
       </div>
 
       <Input.Search
-        placeholder="Rechercher (nom ou code-barres)"
+        placeholder={t('products.search')}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         style={{ maxWidth: 360, marginBottom: 16 }}
@@ -74,11 +76,11 @@ export const ProductsPage = () => {
 
       <Table rowKey="id" columns={columns} dataSource={products} pagination={{ pageSize: 10, hideOnSinglePage: true }} />
 
-      <Modal title="Ajouter un produit" open={adding} onCancel={() => setAdding(false)} footer={null} destroyOnHidden>
-        <ProductForm submitLabel="Ajouter" onSubmit={onAdd} />
+      <Modal title={t('products.addTitle')} open={adding} onCancel={() => setAdding(false)} footer={null} destroyOnHidden>
+        <ProductForm submitLabel={t('form.addSubmit')} onSubmit={onAdd} />
       </Modal>
-      <Modal title="Modifier le produit" open={editing !== null} onCancel={() => setEditing(null)} footer={null} destroyOnHidden>
-        {editing && <ProductForm initial={editing} submitLabel="Enregistrer" onSubmit={onEdit} />}
+      <Modal title={t('products.editTitle')} open={editing !== null} onCancel={() => setEditing(null)} footer={null} destroyOnHidden>
+        {editing && <ProductForm initial={editing} submitLabel={t('form.editSubmit')} onSubmit={onEdit} />}
       </Modal>
     </>
   );

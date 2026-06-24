@@ -1,0 +1,39 @@
+{
+  "nav": { "products": "Produits", "sales": "Vente", "history": "Historique" },
+  "common": { "yes": "Oui", "no": "Non", "close": "Fermer" },
+  "settings": { "dark": "Sombre" },
+  "products": {
+    "title": "Produits",
+    "add": "+ Ajouter un produit",
+    "search": "Rechercher (nom ou code-barres)",
+    "name": "Nom", "category": "Catégorie", "price": "Prix", "stock": "Stock",
+    "edit": "Modifier", "delete": "Supprimer",
+    "deleteConfirm": "Supprimer ce produit ?",
+    "addTitle": "Ajouter un produit", "editTitle": "Modifier le produit", "none": "—"
+  },
+  "form": {
+    "barcode": "Code-barres", "lookup": "Chercher", "name": "Nom",
+    "price": "Prix (€)", "stock": "Stock", "brand": "Marque", "category": "Catégorie",
+    "addSubmit": "Ajouter", "editSubmit": "Enregistrer",
+    "nameRequired": "Nom requis", "priceRequired": "Prix requis", "stockRequired": "Stock requis"
+  },
+  "sales": {
+    "title": "Vente", "clear": "Vider le panier", "add": "+ Ajouter un produit",
+    "product": "Produit", "unit": "PU", "qty": "Qté", "total": "Total", "remove": "Retirer",
+    "empty": "Panier vide — cliquez « Ajouter un produit »",
+    "validate": "Valider la vente", "pickTitle": "Ajouter un produit",
+    "search": "Rechercher un produit", "noProduct": "Aucun produit", "add2": "Ajouter",
+    "stockPrice": "Stock {{stock}} · {{price}}",
+    "validatedTitle": "Vente validée", "validatedMsg": "Vente validée — total {{total}}"
+  },
+  "history": {
+    "title": "Historique des ventes", "filterDay": "Filtrer par jour",
+    "exportCsv": "Exporter CSV", "exportPdf": "Exporter PDF",
+    "date": "Date", "total": "Total", "viewReceipt": "Voir le reçu",
+    "empty": "Aucune vente", "receiptTitle": "Reçu", "exportDone": "Export terminé"
+  },
+  "receipt": {
+    "header": "Reçu #{{id}} — {{date}}", "product": "Produit",
+    "unit": "PU", "qty": "Qté", "total": "Total", "grandTotal": "Total"
+  }
+}

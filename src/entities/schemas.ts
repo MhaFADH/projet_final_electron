@@ -17,3 +17,8 @@ export const cartItemSchema = z.object({
 });
 
 export const cartSchema = z.array(cartItemSchema).min(1);
+
+export const prefsPatchSchema = z.object({
+  language: z.enum(['fr', 'en']).optional(),
+  theme: z.enum(['light', 'dark']).optional(),
+});

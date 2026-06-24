@@ -57,3 +57,8 @@ export interface CartItem {
 
 export type SaleRow = Omit<Sale, 'id'>;
 export type SaleItemRow = Omit<SaleItem, 'id'>;
+
+export interface Prefs {
+  language: 'fr' | 'en';
+  theme: 'light' | 'dark';
+}

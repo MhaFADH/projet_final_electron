@@ -38,7 +38,15 @@ beforeEach(() => {
       throw new Error('no network in tests');
     }) as unknown as typeof fetch,
   );
-  registerHandlers(ipc, { products, off, sales, export: () => Promise.resolve({ saved: false }) });
+  let prefsValue: { language: 'fr' | 'en'; theme: 'light' | 'dark' } = { language: 'fr', theme: 'light' };
+  const prefs = {
+    get: () => prefsValue,
+    set: (patch: Partial<typeof prefsValue>) => {
+      prefsValue = { ...prefsValue, ...patch };
+      return prefsValue;
+    },
+  };
+  registerHandlers(ipc, { products, off, sales, export: () => Promise.resolve({ saved: false }), prefs });
 });
 
 const ok = async <T>(p: unknown): Promise<T> => {

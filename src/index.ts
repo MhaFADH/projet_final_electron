@@ -10,6 +10,7 @@ import { createOpenFoodFacts } from './integrations/openFoodFacts';
 import { exporters } from './export';
 import { exportToFile } from './export/exportToFile';
 import type { ExportRunner } from './export/exporter';
+import { createPrefsStore } from './services/prefsStore';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -49,11 +50,13 @@ app.on('ready', () => {
       products: productService.list(),
       sales: saleService.history(day),
     });
+  const prefs = createPrefsStore();
   registerHandlers(ipcMain, {
     products: productService,
     sales: saleService,
     off: createOpenFoodFacts(),
     export: runExport,
+    prefs,
   });
   createWindow();
 });

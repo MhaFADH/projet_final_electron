@@ -1,0 +1,39 @@
+{
+  "nav": { "products": "Products", "sales": "Sale", "history": "History" },
+  "common": { "yes": "Yes", "no": "No", "close": "Close" },
+  "settings": { "dark": "Dark" },
+  "products": {
+    "title": "Products",
+    "add": "+ Add product",
+    "search": "Search (name or barcode)",
+    "name": "Name", "category": "Category", "price": "Price", "stock": "Stock",
+    "edit": "Edit", "delete": "Delete",
+    "deleteConfirm": "Delete this product?",
+    "addTitle": "Add product", "editTitle": "Edit product", "none": "—"
+  },
+  "form": {
+    "barcode": "Barcode", "lookup": "Look up", "name": "Name",
+    "price": "Price (€)", "stock": "Stock", "brand": "Brand", "category": "Category",
+    "addSubmit": "Add", "editSubmit": "Save",
+    "nameRequired": "Name required", "priceRequired": "Price required", "stockRequired": "Stock required"
+  },
+  "sales": {
+    "title": "Sale", "clear": "Clear cart", "add": "+ Add product",
+    "product": "Product", "unit": "Unit", "qty": "Qty", "total": "Total", "remove": "Remove",
+    "empty": "Cart is empty — click \"Add product\"",
+    "validate": "Complete sale", "pickTitle": "Add product",
+    "search": "Search a product", "noProduct": "No product", "add2": "Add",
+    "stockPrice": "Stock {{stock}} · {{price}}",
+    "validatedTitle": "Sale completed", "validatedMsg": "Sale completed — total {{total}}"
+  },
+  "history": {
+    "title": "Sales history", "filterDay": "Filter by day",
+    "exportCsv": "Export CSV", "exportPdf": "Export PDF",
+    "date": "Date", "total": "Total", "viewReceipt": "View receipt",
+    "empty": "No sales", "receiptTitle": "Receipt", "exportDone": "Export done"
+  },
+  "receipt": {
+    "header": "Receipt #{{id}} — {{date}}", "product": "Product",
+    "unit": "Unit", "qty": "Qty", "total": "Total", "grandTotal": "Total"
+  }
+}
