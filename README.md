@@ -67,10 +67,18 @@ GitHub **Release**. Download the build for your platform from the repository's
 Releases page. (You can also trigger the workflow manually from the Actions
 tab.)
 
-The builds are **unsigned**, so the OS may warn on first launch:
+The builds are **unsigned**, so the OS will warn on first launch:
 
-- **macOS** — right-click the app → **Open**, then confirm.
+- **macOS** — an unsigned, downloaded app shows *"…is damaged and can't be
+  opened"* (Gatekeeper quarantine, especially on Apple Silicon). Clear the
+  quarantine attribute, then open it normally:
+  ```bash
+  xattr -cr /path/to/projet-final-electron.app
+  ```
 - **Windows** — SmartScreen → **More info** → **Run anyway**.
+
+Properly removing these prompts requires paid Apple/Windows code-signing
+certificates, which are out of scope for this project.
 
 ## Tech stack
 
